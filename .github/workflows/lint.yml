@@ -1,24 +1,25 @@
 name: Build and lint
 on:
-  push:
-    paths:
-      - 'linux-cachyos/PKGBUILD'
-      - '.github/workflows/lint.yml'
-  workflow_dispatch:
+ push:
+   paths:
+     - 'linux-cachyos/PKGBUILD'
+     - '.github/workflows/lint.yml'
+ workflow_dispatch:
 jobs:
-  linux-cachyos-silvermont:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Build (LLVM)
-      id: makepkg
-      uses: CachyOS/pkgbuild-action@master
-      with:
-        envvars: "_NUMAdisable=y _build_nvidia= _per_gov= _use_llvm_lto=thin _use_auto_optimization= _processor_opt=silvermont _cc_size=y _cc_harder= _disable_debug=y"
-        pkgdir: "linux-cachyos"
-        namcapExcludeRules: "invalidstartdir"
-        makepkgArgs: "--skipchecksums --skippgpcheck --noconfirm -s"
-        uses: actions/upload-artifact@v3
-        with:
-          path: "./*/*.zst"
+ linux-cachyos-silvermont:
+   runs-on: ubuntu-latest
+   steps:
+   - name: Checkout
+     uses: actions/checkout@v3
+   - name: Build (LLVM)
+     id: makepkg
+     uses: CachyOS/pkgbuild-action@master
+     with:
+       envvars: "_NUMAdisable=y _build_nvidia= _per_gov= _use_llvm_lto=thin _use_auto_optimization= _processor_opt=silvermont _cc_size=y _cc_harder= _disable_debug=y"
+       pkgdir: "linux-cachyos"
+       namcapExcludeRules: "invalidstartdir"
+       makepkgArgs: "--skipchecksums --skippgpcheck --noconfirm -s"
+   - name: Upload artifact
+     uses: actions/upload-artifact@v3
+     with:
+       path: "./*.zst"
